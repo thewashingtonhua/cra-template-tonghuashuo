@@ -1,4 +1,4 @@
-# cra-template-tonghuashuo
+# [WIP] cra-template-tonghuashuo
 
 CRA Template customized by Washington Hua
 
@@ -9,4 +9,3 @@ CRA Template customized by Washington Hua
 - Add standard.js
 - Add standard-version
 - Extract configs from package.json to standalone files
-- Demo by SCSS
