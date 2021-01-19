@@ -17,7 +17,8 @@ const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
-const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
+// const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
+const generateCSSModuleName = require('./css/generateCSSModuleName');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const paths = require('./paths');
 const modules = require('./modules');
@@ -144,13 +145,18 @@ module.exports = function (webpackEnv) {
             root: paths.appSrc,
           },
         },
-        {
-          loader: require.resolve(preProcessor),
-          options: {
-            sourceMap: true,
-          },
-        }
-      );
+      }
+      if (typeof preProcessor === 'string') {
+        loaders.push({
+            loader: require.resolve(preProcessor),
+            options: {
+              sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
+            },
+          }
+        );
+      } else {
+        loaders.push(preProcessor)
+      }
     }
     return loaders;
   };
@@ -404,7 +410,7 @@ module.exports = function (webpackEnv) {
                     },
                   ],
                 ],
-                
+
                 plugins: [
                   [
                     require.resolve('babel-plugin-named-asset-import'),
@@ -449,7 +455,7 @@ module.exports = function (webpackEnv) {
                 cacheDirectory: true,
                 // See #6846 for context on why cacheCompression is disabled
                 cacheCompression: false,
-                
+
                 // Babel sourcemaps are needed for debugging into node_modules
                 // code.  Without the options below, debuggers like VSCode
                 // show incorrect code and set breakpoints on the wrong lines.
@@ -489,7 +495,9 @@ module.exports = function (webpackEnv) {
                   ? shouldUseSourceMap
                   : isEnvDevelopment,
                 modules: {
-                  getLocalIdent: getCSSModuleLocalIdent,
+                  getLocalIdent({ resourcePath }, _, localName) {
+                    return generateCSSModuleName(localName, resourcePath);
+                  },
                 },
               }),
             },
@@ -525,7 +533,9 @@ module.exports = function (webpackEnv) {
                     ? shouldUseSourceMap
                     : isEnvDevelopment,
                   modules: {
-                    getLocalIdent: getCSSModuleLocalIdent,
+                    getLocalIdent({ resourcePath }, _, localName) {
+                      return generateCSSModuleName(localName, resourcePath);
+                    },
                   },
                 },
                 'sass-loader'
