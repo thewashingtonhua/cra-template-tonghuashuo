@@ -16,3 +16,6 @@ CRA Template customized by Washington Hua.
 
 - Jest can't resognize SCSS
 - package.json cannot remove babelConfig & eslintConfig
+
+## TODO
+- All in Typescript ? (webpack.config.ts)
