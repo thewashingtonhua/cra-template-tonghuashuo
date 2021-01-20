@@ -1,6 +1,8 @@
 # [WIP] cra-template-tonghuashuo
 
-CRA Template customized by Washington Hua
+CRA Template customized by Washington Hua.
+
+> Still Working-In-Progress. DON'T USE IN PRODUCTION.
 
 ## Features
 
@@ -9,3 +11,8 @@ CRA Template customized by Washington Hua
 - Add standard.js
 - Add standard-version
 - Extract configs from package.json to standalone files
+
+## Issue
+
+- Jest can't resognize SCSS
+- package.json cannot remove babelConfig & eslintConfig
